@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<style>
+  body { background: transparent; margin: 0; font-family: Arial; }
+  .box {
+    background: #ff4fb3;
+    color: white;
+    padding: 18px 30px;
+    border-radius: 40px;
+    width: fit-content;
+    text-align: center;
+  }
+  .title { font-size: 18px; margin-bottom: 4px; }
+  .time { font-size: 48px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="title">⏱ Cronômetro</div>
+  <div class="time" id="tempo">00:00:00</div>
+</div>
+
+<script>
+function formatar(seg) {
+  const h = String(Math.floor(seg / 3600)).padStart(2,"0");
+  const m = String(Math.floor((seg % 3600)/60)).padStart(2,"0");
+  const s = String(seg % 60).padStart(2,"0");
+  return `${h}:${m}:${s}`;
+}
+
+async function atualizar() {
+  const r = await fetch("/tempo");
+  const d = await r.json();
+  document.getElementById("tempo").innerText = formatar(d.tempo);
+}
+
+setInterval(atualizar, 1000);
+atualizar();
+</script>
+</body>
+</html>
